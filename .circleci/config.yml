@@ -250,16 +250,16 @@ jobs:
 #       # Docker image here
 #     steps:
 #       # Checkout code from git
-#       - run:
-#           name: Get old stack workflow id
-#           command: |
-#             # your code here
+#        - run:
+#            name: Get old stack workflow id
+#            command: |
+#              # your code here
 #             export OldWorkflowID="the id here"
 #             export STACKS=[] #put the list of stacks here
-#       - run:
-#           name: Remove old stacks and files
-#           command: |
-#             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+#        - run:
+#            name: Remove old stacks and files
+#            command: |
+#              if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
 #             then
 #               # your code here
 #             fi
