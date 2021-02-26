@@ -12,7 +12,7 @@ describe('Employee Address Updater', () => {
         } as any),
     );
 
-    const employeeRepository = new MockEmployeeRepository();
+    const employeeRepository = new xxxMockEmployeeRepository();
 
     it('should get and employee and add it to the repository', async () => {
       // Arrange
