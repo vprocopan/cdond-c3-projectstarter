@@ -76,8 +76,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      # Restore from cache
-       - run:
+
+      - run:
           name: run test
           command: |
              cd frontend
