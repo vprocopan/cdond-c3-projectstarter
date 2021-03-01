@@ -62,16 +62,7 @@ jobs:
             cd frontend
             npm install
             npm run build
-      - slack/notify:
-          channel: alert
-          event: fail
-          template: basic_fail_1      
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+
 
   build-backend:
     docker:
@@ -100,21 +91,32 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: run test
           command: |
              cd frontend
              npm install
              npm run test
-             
+      - slack/notify:
+          channel: alert
+          event: fail
+          template: basic_fail_1      
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build             
                 
   test-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      # Restore from cache
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: run test
           command: |
