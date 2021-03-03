@@ -214,7 +214,7 @@ jobs:
       - run:
           name: Get and save public DNS of EC2 instance to https://memstash.io/
           command: |
-            PUBLIC_DNS=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values=udapeople-backend-ec2-*' --query "Reservations[*].Instances[*].PublicDnsName" --output text)
+            PUBLIC_DNS=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values=udapeople-backend-*' --query "Reservations[*].Instances[*].PublicDnsName" --output text)
             echo ${PUBLIC_DNS}
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data ${PUBLIC_DNS} https://api.memstash.io/values/public_dns
       - destroy-aws-resource
