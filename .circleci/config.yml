@@ -299,7 +299,7 @@ jobs:
       - run:
           name: Smoke test on frontend
           command: |
-            URL="http://udapeople-kk1j287dhjppm.s3-website.eu-central-1.amazonaws.com/#/employees"
+            URL="https://udapeople-kk1j287dhjppm.s3.eu-central-1.amazonaws.com/#/employees"
             if curl -s ${URL} | grep "Welcome"
             then
               return 0
