@@ -269,7 +269,7 @@ jobs:
       - run:
           name: Build the frontend
           command: |
-            echo token=$CIRCLE_WORKFLOW_ID
+            
             PUBLIC_DNS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/public_dns)
             echo ${PUBLIC_DNS}
             export API_URL="http://${PUBLIC_DNS}:3030"
@@ -310,6 +310,7 @@ jobs:
       - run:
           name: Smoke test on backend
           command: |
+            export token=$CIRCLE_WORKFLOW_ID
             PUBLIC_DNS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/public_dns)
             echo ${PUBLIC_DNS}
             if curl -s "http://${PUBLIC_DNS}:3030/api/status" | grep "ok"
