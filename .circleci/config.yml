@@ -318,7 +318,7 @@ jobs:
               return 1
             fi
       - revert-migration
-      #- destroy-aws-resource
+      - destroy-aws-resource
       - slack/status
 
   delete-old-infrastructure:
