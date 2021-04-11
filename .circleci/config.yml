@@ -253,7 +253,7 @@ jobs:
             cd .circleci/ansible/
             ansible-playbook -i ./inventory deploy.yml
 #      - revert-migration
-      - destroy-aws-resource
+#      - destroy-aws-resource
       - slack/status
 
   deploy-frontend:
@@ -282,7 +282,7 @@ jobs:
           name: Copy built frontend files to the S3 bucket
           command: |
             aws s3 cp ./frontend/dist s3://udapeople-kk1j287dhjppm --recursive
-      - destroy-aws-resource
+#      - destroy-aws-resource
       - slack/status
 
   smoke-test:
@@ -320,7 +320,7 @@ jobs:
               return 1
             fi
 #      - revert-migration
-      - destroy-aws-resource
+#      - destroy-aws-resource
       - slack/status
 
   delete-old-infrastructure:
