@@ -51,7 +51,7 @@ commands:
           command: |
             printenv >> ./backend/.env
             cd .circleci/ansible/
-            ansible-playbook -i ./inventory db_rollback.yml
+            ansible-playbook -i ./inventory db-rollback.yml
           when: on_fail
 
 parameters:
