@@ -24,4 +24,4 @@
 
   roles:
     - configure-server
-    - db_rollback
+    - db-rollback
