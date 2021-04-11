@@ -219,7 +219,7 @@ jobs:
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data ${PUBLIC_DNS} https://api.memstash.io/values/public_dns
             check=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/public_dns)
             echo $check
-      - destroy-aws-resource
+#      - destroy-aws-resource
       - slack/status
 
   deploy-backend:
