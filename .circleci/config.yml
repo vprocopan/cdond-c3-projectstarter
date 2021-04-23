@@ -9,9 +9,9 @@ commands:
       - run:
           name: Delete all files in the current S3 bucket
           command: |
-            if aws s3api head-bucket --bucket udapeople-kk1j287dhjppm
+            if aws s3api head-bucket --bucket udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}
             then
-              aws s3 rm s3://udapeople-kk1j287dhjppm --recursive
+              aws s3 rm s3://udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}/ --recursive
             fi
           when: on_fail
       - run:
@@ -51,7 +51,7 @@ commands:
           command: |
             printenv >> ./backend/.env
             cd .circleci/ansible/
-            ansible-playbook -i ./inventory db-rollback.yml
+            ansible-playbook -i ./inventory db_rollback.yml
           when: on_fail
 
 parameters:
@@ -214,12 +214,14 @@ jobs:
       - run:
           name: Get and save public DNS of EC2 instance to https://memstash.io/
           command: |
-            PUBLIC_DNS=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values=backend-*' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
+            PUBLIC_DNS=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values=udapeople-backend-ec2-*' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             echo ${PUBLIC_DNS}
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data ${PUBLIC_DNS} https://api.memstash.io/values/public_dns
-            check=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/public_dns)
-            echo $check
-#      - destroy-aws-resource
+            curl -H "Content-Type: text/plain" \
+               -H "token: ${CIRCLE_WORKFLOW_ID}" \
+               --request PUT \
+               --data ${PUBLIC_DNS} \
+               https://api.memstash.io/values/public_dns
+      - destroy-aws-resource
       - slack/status
 
   deploy-backend:
@@ -252,8 +254,8 @@ jobs:
             printenv >> ./backend/.env
             cd .circleci/ansible/
             ansible-playbook -i ./inventory deploy.yml
-#      - revert-migration
-#      - destroy-aws-resource
+      - revert-migration
+      - destroy-aws-resource
       - slack/status
 
   deploy-frontend:
@@ -281,8 +283,8 @@ jobs:
       - run: 
           name: Copy built frontend files to the S3 bucket
           command: |
-            aws s3 cp ./frontend/dist s3://udapeople-kk1j287dhjppm --recursive
-#      - destroy-aws-resource
+            aws s3 cp ./frontend/dist s3://udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}/ --recursive
+      - destroy-aws-resource
       - slack/status
 
   smoke-test:
@@ -301,7 +303,7 @@ jobs:
       - run:
           name: Smoke test on frontend
           command: |
-            URL="https://udapeople-kk1j287dhjppm.s3.eu-central-1.amazonaws.com/index.html#/employees"
+            URL="http://udapeople-s3bucket-${CIRCLE_WORKFLOW_ID}.s3-website.us-east-2.amazonaws.com/#/employees"
             if curl -s ${URL} | grep "Welcome"
             then
               return 0
@@ -319,8 +321,8 @@ jobs:
             else
               return 1
             fi
-#      - revert-migration
-#      - destroy-aws-resource
+      - revert-migration
+      - destroy-aws-resource
       - slack/status
 
   delete-old-infrastructure:
@@ -344,8 +346,8 @@ jobs:
             echo "Delete old infrastructure"
             if [ -n "${OLD_CIRCLE_WORKFLOW_ID}" ] && [[ "${STACKS[@]}" =~ "${OLD_CIRCLE_WORKFLOW_ID}" ]]
             then
-              echo deleting all files at S3 bucket udapeople-kk1j287dhjppm
-              aws s3 rm s3://udapeople-kk1j287dhjppm --recursive
+              echo deleting all files at S3 bucket udapeople-s3bucket-${OLD_CIRCLE_WORKFLOW_ID}
+              aws s3 rm s3://udapeople-s3bucket-${OLD_CIRCLE_WORKFLOW_ID}/ --recursive
               echo deleting stack udapeople-frontend-${OLD_CIRCLE_WORKFLOW_ID}
               aws cloudformation delete-stack --stack-name udapeople-frontend-${OLD_CIRCLE_WORKFLOW_ID}
               echo deleting stack udapeople-backend-${OLD_CIRCLE_WORKFLOW_ID}
@@ -427,9 +429,9 @@ workflows:
           filters:
             branches:
               only: master
-    #  - delete-old-infrastructure:
-    #      requires:
-          #   - smoke-test
-          # filters:
-          #   branches:
-          #     only: master
+      - delete-old-infrastructure:
+          requires:
+            - smoke-test
+          filters:
+            branches:
+              only: master
