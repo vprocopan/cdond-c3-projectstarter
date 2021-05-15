@@ -323,8 +323,8 @@ jobs:
             else
               return 1
             fi
-      - revert-migration
-      - destroy-aws-resource
+      #- revert-migration
+      #- destroy-aws-resource
       - slack/status
 
   delete-old-infrastructure:
