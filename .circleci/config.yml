@@ -52,7 +52,7 @@ commands:
             printenv >> ./backend/.env
             cd .circleci/ansible/
             ansible-playbook -i ./inventory db_rollback.yml
-            no_output_timeout: 60m
+          no_output_timeout: 60m
           when: on_fail
 
 parameters:
