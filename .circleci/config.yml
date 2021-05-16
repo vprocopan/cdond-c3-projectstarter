@@ -196,7 +196,7 @@ jobs:
       #            echo deleting bucket $bucket
       #            aws s3 rb --force s3://$bucket
       #        done
-       - run:
+      - run:
           name: Create/Update frontend infrastructure via AWS CloudFormation
           command: |
             aws cloudformation deploy \
