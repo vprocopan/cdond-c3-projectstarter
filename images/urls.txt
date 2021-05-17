@@ -1,2 +1,5 @@
 https://github.com/vprocopan/cdond-c3-projectstarter/
-s3://udapeople-kk1j287dhjppm
+http://udapeople-s3bucket-80af3713-de42-4153-955b-5d3b516ae796.s3-website-us-west-2.amazonaws.com/
+http://d1pf4biboecpz0.cloudfront.net/
+http://ec2-54-213-239-106.us-west-2.compute.amazonaws.com/
+http://ec2-18-185-125-36.eu-central-1.compute.amazonaws.com:9090/
