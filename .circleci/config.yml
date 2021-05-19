@@ -280,6 +280,7 @@ jobs:
             export API_URL="http://${PUBLIC_DNS}:3030"
             echo API_URL=${API_URL}
             cd frontend
+            
             npm install
             npm run build
       - run: 
